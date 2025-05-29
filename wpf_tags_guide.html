@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPF XAML 태그 완전 가이드</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tag-section {
+            margin-bottom: 40px;
+            border: 2px solid #e74c3c;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .tag-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .tag-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .tag-content {
+            display: flex;
+            min-height: 300px;
+        }
+        
+        .demo-area {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            border-right: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .explanation {
+            flex: 1;
+            padding: 20px;
+            background: white;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .property-list {
+            background: #f1f2f6;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .demo-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .demo-textbox {
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 200px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .demo-textbox:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+        }
+        
+        .demo-label {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .demo-checkbox {
+            transform: scale(1.5);
+            margin-right: 10px;
+        }
+        
+        .demo-radiobutton {
+            transform: scale(1.3);
+            margin-right: 8px;
+        }
+        
+        .demo-combobox {
+            padding: 8px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 150px;
+        }
+        
+        .demo-listbox {
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 5px;
+            height: 120px;
+            width: 200px;
+            font-size: 14px;
+        }
+        
+        .demo-slider {
+            width: 200px;
+            height: 20px;
+            appearance: none;
+            background: #ddd;
+            border-radius: 10px;
+            outline: none;
+        }
+        
+        .demo-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #3498db;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .demo-progressbar {
+            width: 250px;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .demo-progressbar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            width: 65%;
+            transition: width 0.3s ease;
+        }
+        
+        .layout-demo {
+            width: 300px;
+            height: 200px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+        
+        .stack-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .grid-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            height: 100%;
+        }
+        
+        .grid-item {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .dock-demo {
+            position: relative;
+            height: 100%;
+        }
+        
+        .dock-item {
+            position: absolute;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .dock-top { top: 0; left: 0; right: 0; height: 30px; }
+        .dock-bottom { bottom: 0; left: 0; right: 0; height: 30px; }
+        .dock-left { left: 0; top: 35px; bottom: 35px; width: 50px; }
+        .dock-right { right: 0; top: 35px; bottom: 35px; width: 50px; }
+        .dock-fill { left: 55px; right: 55px; top: 35px; bottom: 35px; background: #f8f9fa; color: #333; }
+        
+        .wrap-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .wrap-item {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .canvas-demo {
+            position: relative;
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            width: 250px;
+            height: 150px;
+        }
+        
+        .canvas-item {
+            position: absolute;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        
+        .canvas-rect { top: 10px; left: 10px; }
+        .canvas-circle { top: 50px; left: 80px; width: 40px; height: 40px; border-radius: 50%; }
+        .canvas-text { top: 100px; left: 150px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 WPF XAML 태그 완전 가이드</h1>
+        
+        <!-- Button 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Button&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <button class="demo-button" onclick="alert('버튼이 클릭되었습니다!')">클릭하세요!</button>
+                </div>
+                <div class="explanation">
+                    <h3>Button 태그란?</h3>
+                    <p>사용자가 클릭할 수 있는 버튼을 만드는 태그입니다. 가장 기본적이고 많이 사용되는 컨트롤입니다.</p>
+                    
+                    <div class="code-block">&lt;Button Name="myButton" Content="클릭하세요!" 
+        Width="100" Height="30" 
+        Background="Blue" Foreground="White"
+        Click="Button_Click"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Content:</strong> 버튼에 표시될 텍스트나 내용<br>
+                        • <strong>Width/Height:</strong> 버튼의 크기<br>
+                        • <strong>Background:</strong> 배경색<br>
+                        • <strong>Foreground:</strong> 글자색<br>
+                        • <strong>Click:</strong> 클릭 이벤트 핸들러<br>
+                        • <strong>IsEnabled:</strong> 버튼 활성화/비활성화
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> Button은 단일 자식 요소를 가질 수 있으며, 복잡한 내용을 위해 Grid, StackPanel 등을 자식으로 사용할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TextBox 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;TextBox&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <input type="text" class="demo-textbox" placeholder="여기에 텍스트를 입력하세요..." />
+                </div>
+                <div class="explanation">
+                    <h3>TextBox 태그란?</h3>
+                    <p>사용자가 텍스트를 입력할 수 있는 입력 필드를 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;TextBox Name="myTextBox" 
+         Text="기본 텍스트"
+         Width="200" Height="25"
+         MaxLength="50"
+         TextWrapping="Wrap"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Text:</strong> 텍스트박스의 내용<br>
+                        • <strong>MaxLength:</strong> 최대 입력 가능한 글자 수<br>
+                        • <strong>TextWrapping:</strong> 텍스트 줄바꿈 설정<br>
+                        • <strong>AcceptsReturn:</strong> Enter 키 입력 허용<br>
+                        • <strong>IsReadOnly:</strong> 읽기 전용 모드<br>
+                        • <strong>PasswordChar:</strong> 비밀번호 문자 설정
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> TextBox는 일반적으로 자식 태그를 가지지 않습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Label 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Label&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <label class="demo-label">이것은 레이블입니다</label>
+                </div>
+                <div class="explanation">
+                    <h3>Label 태그란?</h3>
+                    <p>텍스트를 표시하는 태그로, 다른 컨트롤의 설명이나 제목을 표시할 때 사용합니다.</p>
+                    
+                    <div class="code-block">&lt;Label Content="사용자 이름:" 
+       Target="{Binding ElementName=userTextBox}"
+       FontWeight="Bold"
+       Foreground="DarkBlue"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Content:</strong> 레이블에 표시될 내용<br>
+                        • <strong>Target:</strong> 연결된 컨트롤 지정<br>
+                        • <strong>FontWeight:</strong> 글자 굵기<br>
+                        • <strong>FontSize:</strong> 글자 크기<br>
+                        • <strong>Foreground:</strong> 글자색<br>
+                        • <strong>HorizontalAlignment:</strong> 수평 정렬
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> Label은 단일 자식 요소를 가질 수 있으며, 복잡한 내용을 위해 다른 컨트롤들을 포함할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CheckBox 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;CheckBox&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" class="demo-checkbox" />
+                        <span>이 옵션을 선택하세요</span>
+                    </label>
+                </div>
+                <div class="explanation">
+                    <h3>CheckBox 태그란?</h3>
+                    <p>사용자가 선택하거나 해제할 수 있는 체크박스를 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;CheckBox Name="myCheckBox" 
+          Content="동의합니다"
+          IsChecked="True"
+          IsThreeState="False"
+          Checked="CheckBox_Checked"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Content:</strong> 체크박스 옆에 표시될 텍스트<br>
+                        • <strong>IsChecked:</strong> 체크 상태 (True/False/null)<br>
+                        • <strong>IsThreeState:</strong> 3상태 모드 (불확정 상태 포함)<br>
+                        • <strong>Checked/Unchecked:</strong> 체크/해제 이벤트<br>
+                        • <strong>IsEnabled:</strong> 활성화/비활성화 상태
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> CheckBox는 Content 속성을 통해 단일 자식 요소를 가질 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RadioButton 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;RadioButton&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <label style="display: flex; align-items: center;">
+                            <input type="radio" name="demo" class="demo-radiobutton" />
+                            <span>옵션 1</span>
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="radio" name="demo" class="demo-radiobutton" checked />
+                            <span>옵션 2</span>
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="radio" name="demo" class="demo-radiobutton" />
+                            <span>옵션 3</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>RadioButton 태그란?</h3>
+                    <p>여러 옵션 중 하나만 선택할 수 있는 라디오 버튼을 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;RadioButton Name="option1" 
+             Content="옵션 1"
+             GroupName="MyGroup"
+             IsChecked="True"
+             Checked="RadioButton_Checked"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Content:</strong> 라디오버튼 옆에 표시될 텍스트<br>
+                        • <strong>GroupName:</strong> 그룹 이름 (같은 그룹 내에서 하나만 선택)<br>
+                        • <strong>IsChecked:</strong> 선택 상태<br>
+                        • <strong>Checked/Unchecked:</strong> 선택/해제 이벤트<br>
+                        • <strong>IsEnabled:</strong> 활성화/비활성화 상태
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> RadioButton은 Content 속성을 통해 단일 자식 요소를 가질 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ComboBox 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;ComboBox&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <select class="demo-combobox">
+                        <option>항목 1</option>
+                        <option selected>항목 2</option>
+                        <option>항목 3</option>
+                        <option>항목 4</option>
+                    </select>
+                </div>
+                <div class="explanation">
+                    <h3>ComboBox 태그란?</h3>
+                    <p>드롭다운 목록에서 항목을 선택할 수 있는 콤보박스를 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;ComboBox Name="myComboBox" 
+          Width="150" Height="25"
+          SelectedIndex="0"
+          IsEditable="False"&gt;
+    &lt;ComboBoxItem Content="항목 1"/&gt;
+    &lt;ComboBoxItem Content="항목 2" IsSelected="True"/&gt;
+    &lt;ComboBoxItem Content="항목 3"/&gt;
+&lt;/ComboBox&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>SelectedIndex:</strong> 선택된 항목의 인덱스<br>
+                        • <strong>SelectedItem:</strong> 선택된 항목<br>
+                        • <strong>IsEditable:</strong> 편집 가능 여부<br>
+                        • <strong>ItemsSource:</strong> 데이터 바인딩 소스<br>
+                        • <strong>DisplayMemberPath:</strong> 표시할 속성 경로
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> ComboBoxItem 태그들을 자식으로 가집니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ListBox 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;ListBox&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <select class="demo-listbox" multiple>
+                        <option>항목 1</option>
+                        <option selected>항목 2</option>
+                        <option>항목 3</option>
+                        <option selected>항목 4</option>
+                        <option>항목 5</option>
+                    </select>
+                </div>
+                <div class="explanation">
+                    <h3>ListBox 태그란?</h3>
+                    <p>여러 항목을 목록으로 표시하고 선택할 수 있는 리스트박스를 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;ListBox Name="myListBox" 
+         Width="200" Height="120"
+         SelectionMode="Multiple"&gt;
+    &lt;ListBoxItem Content="항목 1"/&gt;
+    &lt;ListBoxItem Content="항목 2" IsSelected="True"/&gt;
+    &lt;ListBoxItem Content="항목 3"/&gt;
+    &lt;ListBoxItem Content="항목 4"/&gt;
+&lt;/ListBox&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>SelectionMode:</strong> 선택 모드 (Single/Multiple/Extended)<br>
+                        • <strong>SelectedItems:</strong> 선택된 항목들<br>
+                        • <strong>ScrollViewer:</strong> 스크롤 설정<br>
+                        • <strong>ItemsSource:</strong> 데이터 바인딩 소스<br>
+                        • <strong>DisplayMemberPath:</strong> 표시할 속성 경로
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> ListBoxItem 태그들을 자식으로 가집니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Slider&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <input type="range" class="demo-slider" min="0" max="100" value="50" />
+                </div>
+                <div class="explanation">
+                    <h3>Slider 태그란?</h3>
+                    <p>사용자가 값을 슬라이더로 조정할 수 있는 컨트롤을 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;Slider Name="mySlider" 
+        Width="200" Height="20"
+        Minimum="0" Maximum="100" 
+        Value="50" 
+        TickFrequency="10"
+        IsSnapToTickEnabled="True"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Minimum/Maximum:</strong> 최솟값/최댓값<br>
+                        • <strong>Value:</strong> 현재 값<br>
+                        • <strong>TickFrequency:</strong> 눈금 간격<br>
+                        • <strong>IsSnapToTickEnabled:</strong> 눈금에 스냅 여부<br>
+                        • <strong>Orientation:</strong> 방향 (Horizontal/Vertical)<br>
+                        • <strong>SmallChange/LargeChange:</strong> 증감 단위
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> Slider는 일반적으로 자식 태그를 가지지 않습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ProgressBar 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;ProgressBar&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div class="demo-progressbar">
+                        <div class="demo-progressbar-fill"></div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>ProgressBar 태그란?</h3>
+                    <p>작업의 진행 상태를 시각적으로 표시하는 프로그레스바를 만드는 태그입니다.</p>
+                    
+                    <div class="code-block">&lt;ProgressBar Name="myProgressBar" 
+             Width="200" Height="20"
+             Minimum="0" Maximum="100" 
+             Value="65"
+             IsIndeterminate="False"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Minimum/Maximum:</strong> 최솟값/최댓값<br>
+                        • <strong>Value:</strong> 현재 진행값<br>
+                        • <strong>IsIndeterminate:</strong> 불확정 모드 (애니메이션)<br>
+                        • <strong>Orientation:</strong> 방향 (Horizontal/Vertical)<br>
+                        • <strong>Foreground:</strong> 진행바 색상<br>
+                        • <strong>Background:</strong> 배경색
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> ProgressBar는 일반적으로 자식 태그를 가지지 않습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- StackPanel 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;StackPanel&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div class="layout-demo stack-demo">
+                        <button class="demo-button" style="margin: 0;">버튼 1</button>
+                        <button class="demo-button" style="margin: 0;">버튼 2</button>
+                        <button class="demo-button" style="margin: 0;">버튼 3</button>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>StackPanel 태그란?</h3>
+                    <p>자식 요소들을 수직 또는 수평으로 순서대로 배치하는 레이아웃 패널입니다.</p>
+                    
+                    <div class="code-block">&lt;StackPanel Orientation="Vertical" 
+            Margin="10"&gt;
+    &lt;Button Content="버튼 1" Height="30"/&gt;
+    &lt;Button Content="버튼 2" Height="30"/&gt;
+    &lt;Button Content="버튼 3" Height="30"/&gt;
+&lt;/StackPanel&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Orientation:</strong> 배치 방향 (Vertical/Horizontal)<br>
+                        • <strong>Margin:</strong> 외부 여백<br>
+                        • <strong>Background:</strong> 배경색<br>
+                        • <strong>HorizontalAlignment:</strong> 수평 정렬<br>
+                        • <strong>VerticalAlignment:</strong> 수직 정렬
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> 모든 WPF 컨트롤을 자식으로 가질 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Grid 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Grid&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div class="layout-demo grid-demo">
+                        <div class="grid-item">셀 1</div>
+                        <div class="grid-item">셀 2</div>
+                        <div class="grid-item">셀 3</div>
+                        <div class="grid-item">셀 4</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>Grid 태그란?</h3>
+                    <p>행과 열로 구성된 테이블 형태의 레이아웃을 만드는 가장 유연한 패널입니다.</p>
+                    
+                    <div class="code-block">&lt;Grid&gt;
+    &lt;Grid.RowDefinitions&gt;
+        &lt;RowDefinition Height="Auto"/&gt;
+        &lt;RowDefinition Height="*"/&gt;
+    &lt;/Grid.RowDefinitions&gt;
+    &lt;Grid.ColumnDefinitions&gt;
+        &lt;ColumnDefinition Width="100"/&gt;
+        &lt;ColumnDefinition Width="*"/&gt;
+    &lt;/Grid.ColumnDefinitions&gt;
+    
+    &lt;Button Grid.Row="0" Grid.Column="0" Content="버튼"/&gt;
+    &lt;TextBox Grid.Row="0" Grid.Column="1" Text="텍스트박스"/&gt;
+&lt;/Grid&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Grid.Row/Column:</strong> 자식 요소의 행/열 위치<br>
+                        • <strong>Grid.RowSpan/ColumnSpan:</strong> 행/열 병합<br>
+                        • <strong>RowDefinitions/ColumnDefinitions:</strong> 행/열 정의<br>
+                        • <strong>Height/Width:</strong> Auto, *, 고정값<br>
+                        • <strong>ShowGridLines:</strong> 격자선 표시 (디버그용)
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> RowDefinition, ColumnDefinition과 모든 WPF 컨트롤을 자식으로 가집니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DockPanel 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;DockPanel&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div class="layout-demo dock-demo">
+                        <div class="dock-item dock-top">Top</div>
+                        <div class="dock-item dock-bottom">Bottom</div>
+                        <div class="dock-item dock-left">Left</div>
+                        <div class="dock-item dock-right">Right</div>
+                        <div class="dock-item dock-fill">Fill</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>DockPanel 태그란?</h3>
+                    <p>자식 요소들을 상하좌우 가장자리에 도킹하고 남은 공간을 채우는 레이아웃 패널입니다.</p>
+                    
+                    <div class="code-block">&lt;DockPanel LastChildFill="True"&gt;
+    &lt;Menu DockPanel.Dock="Top" Height="25"&gt;...&lt;/Menu&gt;
+    &lt;StatusBar DockPanel.Dock="Bottom" Height="25"&gt;...&lt;/StatusBar&gt;
+    &lt;TreeView DockPanel.Dock="Left" Width="200"&gt;...&lt;/TreeView&gt;
+    &lt;TextBox Name="mainContent"&gt;...&lt;/TextBox&gt;
+&lt;/DockPanel&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>DockPanel.Dock:</strong> 도킹 위치 (Top/Bottom/Left/Right)<br>
+                        • <strong>LastChildFill:</strong> 마지막 자식이 남은 공간 채움<br>
+                        • <strong>Background:</strong> 배경색<br>
+                        • <strong>Margin:</strong> 외부 여백
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> 모든 WPF 컨트롤을 자식으로 가질 수 있으며, DockPanel.Dock 속성으로 위치를 지정합니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- WrapPanel 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;WrapPanel&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div class="layout-demo wrap-demo">
+                        <span class="wrap-item">항목1</span>
+                        <span class="wrap-item">항목2</span>
+                        <span class="wrap-item">항목3</span>
+                        <span class="wrap-item">항목4</span>
+                        <span class="wrap-item">항목5</span>
+                        <span class="wrap-item">항목6</span>
+                        <span class="wrap-item">항목7</span>
+                        <span class="wrap-item">항목8</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>WrapPanel 태그란?</h3>
+                    <p>자식 요소들을 순서대로 배치하다가 공간이 부족하면 다음 줄로 자동으로 넘어가는 패널입니다.</p>
+                    
+                    <div class="code-block">&lt;WrapPanel Orientation="Horizontal" 
+           ItemHeight="30" ItemWidth="80"&gt;
+    &lt;Button Content="버튼1"/&gt;
+    &lt;Button Content="버튼2"/&gt;
+    &lt;Button Content="버튼3"/&gt;
+    &lt;Button Content="버튼4"/&gt;
+    &lt;Button Content="버튼5"/&gt;
+&lt;/WrapPanel&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Orientation:</strong> 배치 방향 (Horizontal/Vertical)<br>
+                        • <strong>ItemHeight/ItemWidth:</strong> 자식 요소의 고정 크기<br>
+                        • <strong>HorizontalAlignment:</strong> 수평 정렬<br>
+                        • <strong>VerticalAlignment:</strong> 수직 정렬
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> 모든 WPF 컨트롤을 자식으로 가질 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Canvas 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Canvas&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div class="canvas-demo">
+                        <div class="canvas-item canvas-rect">Rect</div>
+                        <div class="canvas-item canvas-circle">●</div>
+                        <div class="canvas-item canvas-text">Text</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>Canvas 태그란?</h3>
+                    <p>자식 요소들을 절대 좌표로 정확한 위치에 배치할 수 있는 패널입니다.</p>
+                    
+                    <div class="code-block">&lt;Canvas Width="300" Height="200" 
+        Background="LightGray"&gt;
+    &lt;Rectangle Canvas.Left="10" Canvas.Top="10" 
+               Width="50" Height="30" Fill="Blue"/&gt;
+    &lt;Ellipse Canvas.Left="100" Canvas.Top="50" 
+             Width="40" Height="40" Fill="Red"/&gt;
+    &lt;TextBlock Canvas.Left="200" Canvas.Top="100" 
+               Text="Hello" FontSize="16"/&gt;
+&lt;/Canvas&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Canvas.Left/Top:</strong> 자식 요소의 X, Y 좌표<br>
+                        • <strong>Canvas.Right/Bottom:</strong> 우하단 기준 좌표<br>
+                        • <strong>Canvas.ZIndex:</strong> Z축 순서 (겹침 순서)<br>
+                        • <strong>ClipToBounds:</strong> 경계 자르기 여부
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> 모든 WPF 컨트롤을 자식으로 가지며, Canvas.Left, Canvas.Top 등으로 위치를 지정합니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Image 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Image&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div style="width: 150px; height: 100px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                        🖼️ 이미지 영역
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>Image 태그란?</h3>
+                    <p>이미지 파일을 표시하는 태그입니다. 다양한 이미지 포맷을 지원합니다.</p>
+                    
+                    <div class="code-block">&lt;Image Name="myImage" 
+       Source="images/photo.jpg"
+       Width="200" Height="150"
+       Stretch="Uniform"
+       HorizontalAlignment="Center"/&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Source:</strong> 이미지 파일 경로 또는 URI<br>
+                        • <strong>Stretch:</strong> 크기 조정 방식 (None/Fill/Uniform/UniformToFill)<br>
+                        • <strong>Width/Height:</strong> 이미지 크기<br>
+                        • <strong>Opacity:</strong> 투명도 (0.0~1.0)<br>
+                        • <strong>RenderTransform:</strong> 변환 (회전, 크기 조정 등)
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> Image는 자식 태그를 가지지 않습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ScrollViewer 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;ScrollViewer&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div style="width: 200px; height: 120px; border: 2px solid #3498db; border-radius: 8px; overflow-y: scroll; padding: 10px; background: #f8f9fa;">
+                        <p>이것은 스크롤 가능한 영역입니다.</p>
+                        <p>내용이 많아서 스크롤이 필요합니다.</p>
+                        <p>세 번째 문단입니다.</p>
+                        <p>네 번째 문단입니다.</p>
+                        <p>다섯 번째 문단입니다.</p>
+                        <p>여섯 번째 문단입니다.</p>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>ScrollViewer 태그란?</h3>
+                    <p>내용이 컨트롤 크기보다 클 때 스크롤 기능을 제공하는 래퍼 컨트롤입니다.</p>
+                    
+                    <div class="code-block">&lt;ScrollViewer Width="200" Height="150"
+              HorizontalScrollBarVisibility="Auto"
+              VerticalScrollBarVisibility="Auto"
+              CanContentScroll="True"&gt;
+    &lt;TextBlock Text="긴 텍스트 내용..."
+               TextWrapping="Wrap"/&gt;
+&lt;/ScrollViewer&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>HorizontalScrollBarVisibility:</strong> 수평 스크롤바 표시 설정<br>
+                        • <strong>VerticalScrollBarVisibility:</strong> 수직 스크롤바 표시 설정<br>
+                        • <strong>CanContentScroll:</strong> 내용 기반 스크롤 여부<br>
+                        • <strong>ZoomMode:</strong> 줌 기능 활성화<br>
+                        • <strong>ScrollChanged:</strong> 스크롤 변경 이벤트
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> 단일 자식 요소를 가지며, 보통 Panel이나 다른 컨트롤을 포함합니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;Menu&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div style="background: #ecf0f1; padding: 5px; border-radius: 5px; width: 250px;">
+                        <div style="display: flex; gap: 15px; font-size: 14px;">
+                            <span style="padding: 5px 10px; cursor: pointer; background: #3498db; color: white; border-radius: 3px;">파일</span>
+                            <span style="padding: 5px 10px; cursor: pointer;">편집</span>
+                            <span style="padding: 5px 10px; cursor: pointer;">보기</span>
+                            <span style="padding: 5px 10px; cursor: pointer;">도움말</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>Menu 태그란?</h3>
+                    <p>애플리케이션의 메뉴바를 만드는 태그입니다. 계층적 메뉴 구조를 지원합니다.</p>
+                    
+                    <div class="code-block">&lt;Menu Height="25"&gt;
+    &lt;MenuItem Header="파일"&gt;
+        &lt;MenuItem Header="새로 만들기" Click="New_Click"/&gt;
+        &lt;MenuItem Header="열기" Click="Open_Click"/&gt;
+        &lt;Separator/&gt;
+        &lt;MenuItem Header="종료" Click="Exit_Click"/&gt;
+    &lt;/MenuItem&gt;
+    &lt;MenuItem Header="편집"&gt;
+        &lt;MenuItem Header="복사"/&gt;
+        &lt;MenuItem Header="붙여넣기"/&gt;
+    &lt;/MenuItem&gt;
+&lt;/Menu&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>MenuItem.Header:</strong> 메뉴 항목 제목<br>
+                        • <strong>MenuItem.Click:</strong> 클릭 이벤트<br>
+                        • <strong>MenuItem.IsCheckable:</strong> 체크 가능 여부<br>
+                        • <strong>MenuItem.Icon:</strong> 메뉴 아이콘<br>
+                        • <strong>Separator:</strong> 구분선 추가
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> MenuItem 태그들을 자식으로 가지며, 중첩 구조로 서브메뉴를 만들 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TreeView 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;TreeView&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div style="width: 200px; height: 150px; border: 2px solid #3498db; border-radius: 8px; padding: 10px; background: #f8f9fa; font-size: 14px;">
+                        <div style="margin-bottom: 5px;">📁 폴더1</div>
+                        <div style="margin-left: 15px; margin-bottom: 5px;">📄 파일1.txt</div>
+                        <div style="margin-left: 15px; margin-bottom: 5px;">📄 파일2.txt</div>
+                        <div style="margin-bottom: 5px;">📁 폴더2</div>
+                        <div style="margin-left: 15px; margin-bottom: 5px;">📁 하위폴더</div>
+                        <div style="margin-left: 30px;">📄 파일3.txt</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>TreeView 태그란?</h3>
+                    <p>계층적 데이터를 트리 구조로 표시하는 컨트롤입니다. 폴더 구조나 분류 체계를 표현할 때 유용합니다.</p>
+                    
+                    <div class="code-block">&lt;TreeView Name="myTreeView" Width="200"&gt;
+    &lt;TreeViewItem Header="루트 항목" IsExpanded="True"&gt;
+        &lt;TreeViewItem Header="자식 항목 1"/&gt;
+        &lt;TreeViewItem Header="자식 항목 2"&gt;
+            &lt;TreeViewItem Header="손자 항목 1"/&gt;
+            &lt;TreeViewItem Header="손자 항목 2"/&gt;
+        &lt;/TreeViewItem&gt;
+    &lt;/TreeViewItem&gt;
+&lt;/TreeView&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>TreeViewItem.Header:</strong> 노드 제목<br>
+                        • <strong>TreeViewItem.IsExpanded:</strong> 펼침/접힘 상태<br>
+                        • <strong>TreeViewItem.IsSelected:</strong> 선택 상태<br>
+                        • <strong>SelectedItem:</strong> 선택된 항목<br>
+                        • <strong>ItemsSource:</strong> 데이터 바인딩 소스
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> TreeViewItem 태그들을 자식으로 가지며, 중첩 구조로 계층을 표현합니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TabControl 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;TabControl&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <div style="width: 250px; border: 2px solid #3498db; border-radius: 8px; overflow: hidden;">
+                        <div style="display: flex; background: #ecf0f1;">
+                            <div style="padding: 8px 15px; background: #3498db; color: white; cursor: pointer;">탭 1</div>
+                            <div style="padding: 8px 15px; cursor: pointer;">탭 2</div>
+                            <div style="padding: 8px 15px; cursor: pointer;">탭 3</div>
+                        </div>
+                        <div style="padding: 20px; background: white; height: 80px;">
+                            탭 1의 내용이 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h3>TabControl 태그란?</h3>
+                    <p>여러 페이지를 탭으로 구분하여 표시하는 컨트롤입니다. 공간을 효율적으로 사용할 수 있습니다.</p>
+                    
+                    <div class="code-block">&lt;TabControl Name="myTabControl"&gt;
+    &lt;TabItem Header="첫 번째 탭"&gt;
+        &lt;Grid&gt;
+            &lt;TextBlock Text="첫 번째 탭의 내용"/&gt;
+        &lt;/Grid&gt;
+    &lt;/TabItem&gt;
+    &lt;TabItem Header="두 번째 탭"&gt;
+        &lt;StackPanel&gt;
+            &lt;Button Content="버튼"/&gt;
+            &lt;TextBox Text="텍스트박스"/&gt;
+        &lt;/StackPanel&gt;
+    &lt;/TabItem&gt;
+&lt;/TabControl&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>TabItem.Header:</strong> 탭 제목<br>
+                        • <strong>SelectedIndex:</strong> 선택된 탭 인덱스<br>
+                        • <strong>SelectedItem:</strong> 선택된 탭 항목<br>
+                        • <strong>TabStripPlacement:</strong> 탭 위치 (Top/Bottom/Left/Right)<br>
+                        • <strong>SelectionChanged:</strong> 탭 변경 이벤트
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> TabItem 태그들을 자식으로 가지며, 각 TabItem은 하나의 페이지 내용을 포함합니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GroupBox 태그 -->
+        <div class="tag-section">
+            <div class="tag-header">&lt;GroupBox&gt; 태그</div>
+            <div class="tag-content">
+                <div class="demo-area">
+                    <fieldset style="width: 200px; border: 2px solid #3498db; border-radius: 8px; padding: 15px;">
+                        <legend style="color: #3498db; font-weight: bold;">사용자 정보</legend>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="text" placeholder="이름" style="padding: 5px; border: 1px solid #bdc3c7; border-radius: 4px;">
+                            <input type="email" placeholder="이메일" style="padding: 5px; border: 1px solid #bdc3c7; border-radius: 4px;">
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="explanation">
+                    <h3>GroupBox 태그란?</h3>
+                    <p>관련된 컨트롤들을 시각적으로 그룹화하고 제목을 표시하는 컨테이너입니다.</p>
+                    
+                    <div class="code-block">&lt;GroupBox Header="사용자 정보" 
+          Width="250" Height="150"
+          Margin="10"&gt;
+    &lt;StackPanel Margin="10"&gt;
+        &lt;Label Content="이름:"/&gt;
+        &lt;TextBox Name="nameTextBox"/&gt;
+        &lt;Label Content="이메일:"/&gt;
+        &lt;TextBox Name="emailTextBox"/&gt;
+    &lt;/StackPanel&gt;
+&lt;/GroupBox&gt;</div>
+                    
+                    <div class="property-list">
+                        <strong>주요 속성:</strong><br>
+                        • <strong>Header:</strong> 그룹박스 제목<br>
+                        • <strong>BorderBrush:</strong> 테두리 색상<br>
+                        • <strong>BorderThickness:</strong> 테두리 두께<br>
+                        • <strong>FontWeight:</strong> 제목 글자 굵기<br>
+                        • <strong>Foreground:</strong> 제목 글자색
+                    </div>
+                    
+                    <p><strong>자식 태그:</strong> 단일 자식 요소를 가지며, 보통 Panel을 자식으로 하여 여러 컨트롤을 포함합니다.</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // 간단한 인터랙션 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.tag-section');
+            
+            sections.forEach(section => {
+                section.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                section.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // 프로그레스바 애니메이션
+            const progressFill = document.querySelector('.demo-progressbar-fill');
+            if (progressFill) {
+                setInterval(() => {
+                    const currentWidth = parseInt(progressFill.style.width) || 65;
+                    const newWidth = currentWidth >= 90 ? 20 : currentWidth + 10;
+                    progressFill.style.width = newWidth + '%';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
